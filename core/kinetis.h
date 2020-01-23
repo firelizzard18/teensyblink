@@ -33,527 +33,6 @@
 
 #include <stdint.h>
 
-// Teensy 3.0
-#if defined(__MK20DX128__)
-enum IRQ_NUMBER_t {
-	IRQ_DMA_CH0 =		0,
-	IRQ_DMA_CH1 =		1,
-	IRQ_DMA_CH2 =		2,
-	IRQ_DMA_CH3 =		3,
-	IRQ_DMA_ERROR =		4,
-	IRQ_FTFL_COMPLETE =	6,
-	IRQ_FTFL_COLLISION =	7,
-	IRQ_LOW_VOLTAGE =	8,
-	IRQ_LLWU =		9,
-	IRQ_WDOG =		10,
-	IRQ_I2C0 =		11,
-	IRQ_SPI0 =		12,
-	IRQ_I2S0_TX =		13,
-	IRQ_I2S0_RX =		14,
-	IRQ_UART0_LON =		15,
-	IRQ_UART0_STATUS =	16,
-	IRQ_UART0_ERROR =	17,
-	IRQ_UART1_STATUS =	18,
-	IRQ_UART1_ERROR =	19,
-	IRQ_UART2_STATUS =	20,
-	IRQ_UART2_ERROR =	21,
-	IRQ_ADC0 =		22,
-	IRQ_CMP0 =		23,
-	IRQ_CMP1 =		24,
-	IRQ_FTM0 =		25,
-	IRQ_FTM1 =		26,
-	IRQ_CMT =		27,
-	IRQ_RTC_ALARM =		28,
-	IRQ_RTC_SECOND =	29,
-	IRQ_PIT_CH0 =		30,
-	IRQ_PIT_CH1 =		31,
-	IRQ_PIT_CH2 =		32,
-	IRQ_PIT_CH3 =		33,
-	IRQ_PDB =		34,
-	IRQ_USBOTG =		35,
-	IRQ_USBDCD =		36,
-	IRQ_TSI =		37,
-	IRQ_MCG =		38,
-	IRQ_LPTMR =		39,
-	IRQ_PORTA =		40,
-	IRQ_PORTB =		41,
-	IRQ_PORTC =		42,
-	IRQ_PORTD =		43,
-	IRQ_PORTE =		44,
-	IRQ_SOFTWARE =		45
-};
-#define NVIC_NUM_INTERRUPTS	46
-#define DMA_NUM_CHANNELS	4
-
-#define DMAMUX_SOURCE_UART0_RX		2
-#define DMAMUX_SOURCE_UART0_TX		3
-#define DMAMUX_SOURCE_UART1_RX		4
-#define DMAMUX_SOURCE_UART1_TX		5
-#define DMAMUX_SOURCE_UART2_RX		6
-#define DMAMUX_SOURCE_UART2_TX		7
-#define DMAMUX_SOURCE_I2S0_RX		14
-#define DMAMUX_SOURCE_I2S0_TX		15
-#define DMAMUX_SOURCE_SPI0_RX		16
-#define DMAMUX_SOURCE_SPI0_TX		17
-#define DMAMUX_SOURCE_I2C0		22
-#define DMAMUX_SOURCE_FTM0_CH0		24
-#define DMAMUX_SOURCE_FTM0_CH1		25
-#define DMAMUX_SOURCE_FTM0_CH2		26
-#define DMAMUX_SOURCE_FTM0_CH3		27
-#define DMAMUX_SOURCE_FTM0_CH4		28
-#define DMAMUX_SOURCE_FTM0_CH5		29
-#define DMAMUX_SOURCE_FTM0_CH6		30
-#define DMAMUX_SOURCE_FTM0_CH7		31
-#define DMAMUX_SOURCE_FTM1_CH0		32
-#define DMAMUX_SOURCE_FTM1_CH1		33
-#define DMAMUX_SOURCE_ADC0		40
-#define DMAMUX_SOURCE_CMP0		42
-#define DMAMUX_SOURCE_CMP1		43
-#define DMAMUX_SOURCE_DAC0		45
-#define DMAMUX_SOURCE_CMT		47
-#define DMAMUX_SOURCE_PDB		48
-#define DMAMUX_SOURCE_PORTA		49
-#define DMAMUX_SOURCE_PORTB		50
-#define DMAMUX_SOURCE_PORTC		51
-#define DMAMUX_SOURCE_PORTD		52
-#define DMAMUX_SOURCE_PORTE		53
-#define DMAMUX_SOURCE_ALWAYS0		54
-#define DMAMUX_SOURCE_ALWAYS1		55
-#define DMAMUX_SOURCE_ALWAYS2		56
-#define DMAMUX_SOURCE_ALWAYS3		57
-#define DMAMUX_SOURCE_ALWAYS4		58
-#define DMAMUX_SOURCE_ALWAYS5		59
-#define DMAMUX_SOURCE_ALWAYS6		60
-#define DMAMUX_SOURCE_ALWAYS7		61
-#define DMAMUX_SOURCE_ALWAYS8		62
-#define DMAMUX_SOURCE_ALWAYS9		63
-#define DMAMUX_NUM_SOURCE_ALWAYS	10
-
-#define KINETISK
-#define HAS_KINETISK_UART0
-#define HAS_KINETISK_UART0_FIFO
-#define HAS_KINETISK_UART1
-#define HAS_KINETISK_UART2
-#define HAS_KINETIS_I2C0
-#define HAS_KINETIS_LLWU_16CH
-#define HAS_KINETIS_ADC0
-#define HAS_KINETIS_TSI
-#define HAS_KINETIS_FLASH_FTFL
-
-
-// Teensy 3.1 & 3.2
-#elif defined(__MK20DX256__)
-enum IRQ_NUMBER_t {
-	IRQ_DMA_CH0 =		0,
-	IRQ_DMA_CH1 =		1,
-	IRQ_DMA_CH2 =		2,
-	IRQ_DMA_CH3 =		3,
-	IRQ_DMA_CH4 =		4,
-	IRQ_DMA_CH5 =		5,
-	IRQ_DMA_CH6 =		6,
-	IRQ_DMA_CH7 =		7,
-	IRQ_DMA_CH8 =		8,
-	IRQ_DMA_CH9 =		9,
-	IRQ_DMA_CH10 =		10,
-	IRQ_DMA_CH11 =		11,
-	IRQ_DMA_CH12 =		12,
-	IRQ_DMA_CH13 =		13,
-	IRQ_DMA_CH14 =		14,
-	IRQ_DMA_CH15 =		15,
-	IRQ_DMA_ERROR =		16,
-	IRQ_FTFL_COMPLETE =	18,
-	IRQ_FTFL_COLLISION =	19,
-	IRQ_LOW_VOLTAGE =	20,
-	IRQ_LLWU =		21,
-	IRQ_WDOG =		22,
-	IRQ_I2C0 =		24,
-	IRQ_I2C1 =		25,
-	IRQ_SPI0 =		26,
-	IRQ_SPI1 =		27,
-	IRQ_CAN_MESSAGE =	29,
-	IRQ_CAN_BUS_OFF =	30,
-	IRQ_CAN_ERROR =		31,
-	IRQ_CAN_TX_WARN =	32,
-	IRQ_CAN_RX_WARN =	33,
-	IRQ_CAN_WAKEUP =	34,
-	IRQ_I2S0_TX =		35,
-	IRQ_I2S0_RX =		36,
-	IRQ_UART0_LON =		44,
-	IRQ_UART0_STATUS =	45,
-	IRQ_UART0_ERROR =	46,
-	IRQ_UART1_STATUS =	47,
-	IRQ_UART1_ERROR =	48,
-	IRQ_UART2_STATUS =	49,
-	IRQ_UART2_ERROR =	50,
-	IRQ_ADC0 =		57,
-	IRQ_ADC1 =		58,
-	IRQ_CMP0 =		59,
-	IRQ_CMP1 =		60,
-	IRQ_CMP2 =		61,
-	IRQ_FTM0 =		62,
-	IRQ_FTM1 =		63,
-	IRQ_FTM2 =		64,
-	IRQ_CMT =		65,
-	IRQ_RTC_ALARM =		66,
-	IRQ_RTC_SECOND =	67,
-	IRQ_PIT_CH0 =		68,
-	IRQ_PIT_CH1 =		69,
-	IRQ_PIT_CH2 =		70,
-	IRQ_PIT_CH3 =		71,
-	IRQ_PDB =		72,
-	IRQ_USBOTG =		73,
-	IRQ_USBDCD =		74,
-	IRQ_DAC0 =		81,
-	IRQ_TSI =		83,
-	IRQ_MCG =		84,
-	IRQ_LPTMR =		85,
-	IRQ_PORTA =		87,
-	IRQ_PORTB =		88,
-	IRQ_PORTC =		89,
-	IRQ_PORTD =		90,
-	IRQ_PORTE =		91,
-	IRQ_SOFTWARE =		94
-};
-#define NVIC_NUM_INTERRUPTS	95
-#define DMA_NUM_CHANNELS	16
-
-#define DMAMUX_SOURCE_UART0_RX		2
-#define DMAMUX_SOURCE_UART0_TX		3
-#define DMAMUX_SOURCE_UART1_RX		4
-#define DMAMUX_SOURCE_UART1_TX		5
-#define DMAMUX_SOURCE_UART2_RX		6
-#define DMAMUX_SOURCE_UART2_TX		7
-#define DMAMUX_SOURCE_I2S0_RX		14
-#define DMAMUX_SOURCE_I2S0_TX		15
-#define DMAMUX_SOURCE_SPI0_RX		16
-#define DMAMUX_SOURCE_SPI0_TX		17
-#define DMAMUX_SOURCE_SPI1_RX		18
-#define DMAMUX_SOURCE_SPI1_TX		19
-#define DMAMUX_SOURCE_I2C0		22
-#define DMAMUX_SOURCE_I2C1		23
-#define DMAMUX_SOURCE_FTM0_CH0		24
-#define DMAMUX_SOURCE_FTM0_CH1		25
-#define DMAMUX_SOURCE_FTM0_CH2		26
-#define DMAMUX_SOURCE_FTM0_CH3		27
-#define DMAMUX_SOURCE_FTM0_CH4		28
-#define DMAMUX_SOURCE_FTM0_CH5		29
-#define DMAMUX_SOURCE_FTM0_CH6		30
-#define DMAMUX_SOURCE_FTM0_CH7		31
-#define DMAMUX_SOURCE_FTM1_CH0		32
-#define DMAMUX_SOURCE_FTM1_CH1		33
-#define DMAMUX_SOURCE_FTM2_CH0		34
-#define DMAMUX_SOURCE_FTM2_CH1		35
-#define DMAMUX_SOURCE_ADC0		40
-#define DMAMUX_SOURCE_ADC1		41
-#define DMAMUX_SOURCE_CMP0		42
-#define DMAMUX_SOURCE_CMP1		43
-#define DMAMUX_SOURCE_CMP2		44
-#define DMAMUX_SOURCE_DAC0		45
-#define DMAMUX_SOURCE_CMT		47
-#define DMAMUX_SOURCE_PDB		48
-#define DMAMUX_SOURCE_PORTA		49
-#define DMAMUX_SOURCE_PORTB		50
-#define DMAMUX_SOURCE_PORTC		51
-#define DMAMUX_SOURCE_PORTD		52
-#define DMAMUX_SOURCE_PORTE		53
-#define DMAMUX_SOURCE_ALWAYS0		54
-#define DMAMUX_SOURCE_ALWAYS1		55
-#define DMAMUX_SOURCE_ALWAYS2		56
-#define DMAMUX_SOURCE_ALWAYS3		57
-#define DMAMUX_SOURCE_ALWAYS4		58
-#define DMAMUX_SOURCE_ALWAYS5		59
-#define DMAMUX_SOURCE_ALWAYS6		60
-#define DMAMUX_SOURCE_ALWAYS7		61
-#define DMAMUX_SOURCE_ALWAYS8		62
-#define DMAMUX_SOURCE_ALWAYS9		63
-#define DMAMUX_NUM_SOURCE_ALWAYS	10
-
-#define KINETISK
-#define HAS_KINETISK_UART0
-#define HAS_KINETISK_UART0_FIFO
-#define HAS_KINETISK_UART1
-#define HAS_KINETISK_UART1_FIFO
-#define HAS_KINETISK_UART2
-#define HAS_KINETIS_I2C0
-#define HAS_KINETIS_I2C1
-#define HAS_KINETIS_LLWU_16CH
-#define HAS_KINETIS_ADC0
-#define HAS_KINETIS_ADC1
-#define HAS_KINETIS_TSI
-#define HAS_KINETIS_FLASH_FTFL
-
-// Teensy-LC
-#elif defined(__MKL26Z64__)
-enum IRQ_NUMBER_t {
-	IRQ_DMA_CH0 =		0,
-	IRQ_DMA_CH1 =		1,
-	IRQ_DMA_CH2 =		2,
-	IRQ_DMA_CH3 =		3,
-        IRQ_FTFA =              5,
-        IRQ_LOW_VOLTAGE =       6,
-        IRQ_LLWU =              7,
-        IRQ_I2C0 =              8,
-        IRQ_I2C1 =              9,
-        IRQ_SPI0 =              10,
-        IRQ_SPI1 =              11,
-        IRQ_UART0_STATUS =      12,
-        IRQ_UART1_STATUS =      13,
-        IRQ_UART2_STATUS =      14,
-        IRQ_ADC0 =              15,
-        IRQ_CMP0 =              16,
-        IRQ_FTM0 =              17,
-        IRQ_FTM1 =              18,
-        IRQ_FTM2 =              19,
-        IRQ_RTC_ALARM =         20,
-        IRQ_RTC_SECOND =        21,
-        IRQ_PIT =               22,
-        IRQ_I2S0 =              23,
-        IRQ_USBOTG =            24,
-        IRQ_DAC0 =              25,
-        IRQ_TSI =               26,
-        IRQ_MCG =               27,
-        IRQ_LPTMR =             28,
-	IRQ_SOFTWARE =		29,  // TODO: verify this works
-        IRQ_PORTA =             30,
-        IRQ_PORTCD =            31
-};
-#define NVIC_NUM_INTERRUPTS     32
-#define DMA_NUM_CHANNELS        4
-
-#define DMAMUX_SOURCE_UART0_RX		2
-#define DMAMUX_SOURCE_UART0_TX		3
-#define DMAMUX_SOURCE_UART1_RX		4
-#define DMAMUX_SOURCE_UART1_TX		5
-#define DMAMUX_SOURCE_UART2_RX		6
-#define DMAMUX_SOURCE_UART2_TX		7
-#define DMAMUX_SOURCE_I2S0_RX		14
-#define DMAMUX_SOURCE_I2S0_TX		15
-#define DMAMUX_SOURCE_SPI0_RX		16
-#define DMAMUX_SOURCE_SPI0_TX		17
-#define DMAMUX_SOURCE_SPI1_RX		18
-#define DMAMUX_SOURCE_SPI1_TX		19
-#define DMAMUX_SOURCE_I2C0		22
-#define DMAMUX_SOURCE_I2C1		23
-#define DMAMUX_SOURCE_TPM0_CH0		24
-#define DMAMUX_SOURCE_TPM0_CH1		25
-#define DMAMUX_SOURCE_TPM0_CH2		26
-#define DMAMUX_SOURCE_TPM0_CH3		27
-#define DMAMUX_SOURCE_TPM0_CH4		28
-#define DMAMUX_SOURCE_TPM0_CH5		29
-#define DMAMUX_SOURCE_TPM1_CH0		32
-#define DMAMUX_SOURCE_TPM1_CH1		33
-#define DMAMUX_SOURCE_TPM2_CH0		34
-#define DMAMUX_SOURCE_TPM2_CH1		35
-#define DMAMUX_SOURCE_ADC0		40
-#define DMAMUX_SOURCE_CMP0		42
-#define DMAMUX_SOURCE_DAC0		45
-#define DMAMUX_SOURCE_PORTA		49
-#define DMAMUX_SOURCE_PORTC		51
-#define DMAMUX_SOURCE_PORTD		52
-#define DMAMUX_SOURCE_FTM0_OV		54
-#define DMAMUX_SOURCE_FTM1_OV		55
-#define DMAMUX_SOURCE_FTM2_OV		56
-#define DMAMUX_SOURCE_TSI		57
-#define DMAMUX_SOURCE_ALWAYS0		60
-#define DMAMUX_SOURCE_ALWAYS1		61
-#define DMAMUX_SOURCE_ALWAYS2		62
-#define DMAMUX_SOURCE_ALWAYS3		63
-#define DMAMUX_NUM_SOURCE_ALWAYS	4
-
-#define KINETISL
-#define HAS_KINETISL_UART0
-#define HAS_KINETISL_UART1
-#define HAS_KINETISL_UART2
-#define HAS_KINETIS_I2C0
-#define HAS_KINETIS_I2C0_STOPF
-#define HAS_KINETIS_I2C1
-#define HAS_KINETIS_I2C1_STOPF
-#define HAS_KINETIS_LLWU_16CH
-#define HAS_KINETIS_ADC0
-#define HAS_KINETIS_TSI_LITE
-#define HAS_KINETIS_FLASH_FTFA
-
-
-#elif defined(__MK64FX512__)
-enum IRQ_NUMBER_t {
-	IRQ_DMA_CH0 =		0,
-	IRQ_DMA_CH1 =		1,
-	IRQ_DMA_CH2 =		2,
-	IRQ_DMA_CH3 =		3,
-	IRQ_DMA_CH4 =		4,
-	IRQ_DMA_CH5 =		5,
-	IRQ_DMA_CH6 =		6,
-	IRQ_DMA_CH7 =		7,
-	IRQ_DMA_CH8 =		8,
-	IRQ_DMA_CH9 =		9,
-	IRQ_DMA_CH10 =		10,
-	IRQ_DMA_CH11 =		11,
-	IRQ_DMA_CH12 =		12,
-	IRQ_DMA_CH13 =		13,
-	IRQ_DMA_CH14 =		14,
-	IRQ_DMA_CH15 =		15,
-	IRQ_DMA_ERROR =		16,
-	IRQ_MCM =		17,
-	IRQ_FTFL_COMPLETE =	18,
-	IRQ_FTFL_COLLISION =	19,
-	IRQ_LOW_VOLTAGE =	20,
-	IRQ_LLWU =		21,
-	IRQ_WDOG =		22,
-	IRQ_RNG =		23,
-	IRQ_I2C0 =		24,
-	IRQ_I2C1 =		25,
-	IRQ_SPI0 =		26,
-	IRQ_SPI1 =		27,
-	IRQ_I2S0_TX =		28,
-	IRQ_I2S0_RX =		29,
-	IRQ_UART0_STATUS =	31,
-	IRQ_UART0_ERROR =	32,
-	IRQ_UART1_STATUS =	33,
-	IRQ_UART1_ERROR =	34,
-	IRQ_UART2_STATUS =	35,
-	IRQ_UART2_ERROR =	36,
-	IRQ_UART3_STATUS =	37,
-	IRQ_UART3_ERROR =	38,
-	IRQ_ADC0 =		39,
-	IRQ_CMP0 =		40,
-	IRQ_CMP1 =		41,
-	IRQ_FTM0 =		42,
-	IRQ_FTM1 =		43,
-	IRQ_FTM2 =		44,
-	IRQ_CMT =		45,
-	IRQ_RTC_ALARM =		46,
-	IRQ_RTC_SECOND =	47,
-	IRQ_PIT_CH0 =		48,
-	IRQ_PIT_CH1 =		49,
-	IRQ_PIT_CH2 =		50,
-	IRQ_PIT_CH3 =		51,
-	IRQ_PDB =		52,
-	IRQ_USBOTG =		53,
-	IRQ_USBDCD =		54,
-	IRQ_DAC0 =		56,
-	IRQ_MCG =		57,
-	IRQ_LPTMR =		58,
-	IRQ_PORTA =		59,
-	IRQ_PORTB =		60,
-	IRQ_PORTC =		61,
-	IRQ_PORTD =		62,
-	IRQ_PORTE =		63,
-	IRQ_SOFTWARE =		64,
-	IRQ_SPI2 =		65,
-	IRQ_UART4_STATUS =	66,
-	IRQ_UART4_ERROR =	67,
-	IRQ_UART5_STATUS =	68,
-	IRQ_UART5_ERROR =	69,
-	IRQ_CMP2 =		70,
-	IRQ_FTM3 =		71,
-	IRQ_DAC1 =		72,
-	IRQ_ADC1 =		73,
-	IRQ_I2C2 =		74,
-	IRQ_CAN0_MESSAGE =	75,
-	IRQ_CAN0_BUS_OFF =	76,
-	IRQ_CAN0_ERROR =	77,
-	IRQ_CAN0_TX_WARN =	78,
-	IRQ_CAN0_RX_WARN =	79,
-	IRQ_CAN0_WAKEUP =	80,
-	IRQ_SDHC =		81,
-	IRQ_ENET_TIMER =	82,
-	IRQ_ENET_TX =		83,
-	IRQ_ENET_RX =		84,
-	IRQ_ENET_ERROR =	85
-};
-#define NVIC_NUM_INTERRUPTS	86
-#define DMA_NUM_CHANNELS	16
-
-#define DMAMUX_SOURCE_TSI		1
-#define DMAMUX_SOURCE_UART0_RX		2
-#define DMAMUX_SOURCE_UART0_TX		3
-#define DMAMUX_SOURCE_UART1_RX		4
-#define DMAMUX_SOURCE_UART1_TX		5
-#define DMAMUX_SOURCE_UART2_RX		6
-#define DMAMUX_SOURCE_UART2_TX		7
-#define DMAMUX_SOURCE_UART3_RX		8
-#define DMAMUX_SOURCE_UART3_TX		9
-#define DMAMUX_SOURCE_UART4_RXTX	10
-#define DMAMUX_SOURCE_UART5_RXTX	11
-#define DMAMUX_SOURCE_I2S0_RX		12
-#define DMAMUX_SOURCE_I2S0_TX		13
-#define DMAMUX_SOURCE_SPI0_RX		14
-#define DMAMUX_SOURCE_SPI0_TX		15
-#define DMAMUX_SOURCE_SPI1		16
-#define DMAMUX_SOURCE_SPI2		17
-#define DMAMUX_SOURCE_I2C0		18
-#define DMAMUX_SOURCE_I2C1		19
-#define DMAMUX_SOURCE_I2C2		19
-#define DMAMUX_SOURCE_FTM0_CH0		20
-#define DMAMUX_SOURCE_FTM0_CH1		21
-#define DMAMUX_SOURCE_FTM0_CH2		22
-#define DMAMUX_SOURCE_FTM0_CH3		23
-#define DMAMUX_SOURCE_FTM0_CH4		24
-#define DMAMUX_SOURCE_FTM0_CH5		25
-#define DMAMUX_SOURCE_FTM0_CH6		26
-#define DMAMUX_SOURCE_FTM0_CH7		27
-#define DMAMUX_SOURCE_FTM1_CH0		28
-#define DMAMUX_SOURCE_FTM1_CH1		29
-#define DMAMUX_SOURCE_FTM2_CH0		30
-#define DMAMUX_SOURCE_FTM2_CH1		31
-#define DMAMUX_SOURCE_FTM3_CH0		32
-#define DMAMUX_SOURCE_FTM3_CH1		33
-#define DMAMUX_SOURCE_FTM3_CH2		34
-#define DMAMUX_SOURCE_FTM3_CH3		35
-#define DMAMUX_SOURCE_FTM3_CH4		36
-#define DMAMUX_SOURCE_FTM3_CH5		37
-#define DMAMUX_SOURCE_FTM3_CH6		38
-#define DMAMUX_SOURCE_FTM3_CH7		39
-#define DMAMUX_SOURCE_ADC0		40
-#define DMAMUX_SOURCE_ADC1		41
-#define DMAMUX_SOURCE_CMP0		42
-#define DMAMUX_SOURCE_CMP1		43
-#define DMAMUX_SOURCE_CMP2		44
-#define DMAMUX_SOURCE_DAC0		45
-#define DMAMUX_SOURCE_DAC1		46
-#define DMAMUX_SOURCE_CMT		47
-#define DMAMUX_SOURCE_PDB		48
-#define DMAMUX_SOURCE_PORTA		49
-#define DMAMUX_SOURCE_PORTB		50
-#define DMAMUX_SOURCE_PORTC		51
-#define DMAMUX_SOURCE_PORTD		52
-#define DMAMUX_SOURCE_PORTE		53
-#define DMAMUX_SOURCE_IEEE1588_T0	54
-#define DMAMUX_SOURCE_IEEE1588_T1	55
-#define DMAMUX_SOURCE_IEEE1588_T2	56
-#define DMAMUX_SOURCE_IEEE1588_T3	57
-#define DMAMUX_SOURCE_ALWAYS0		58
-#define DMAMUX_SOURCE_ALWAYS1		59
-#define DMAMUX_SOURCE_ALWAYS2		60
-#define DMAMUX_SOURCE_ALWAYS3		61
-#define DMAMUX_SOURCE_ALWAYS4		62
-#define DMAMUX_SOURCE_ALWAYS5		63
-#define DMAMUX_NUM_SOURCE_ALWAYS	6
-
-#define KINETISK
-#define HAS_KINETISK_UART0
-#define HAS_KINETISK_UART0_FIFO
-#define HAS_KINETISK_UART1
-#define HAS_KINETISK_UART1_FIFO
-#define HAS_KINETISK_UART2
-#define HAS_KINETISK_UART3
-#define HAS_KINETISK_UART4
-#define HAS_KINETISK_UART5
-#define HAS_KINETIS_I2C0
-#define HAS_KINETIS_I2C0_STOPF
-#define HAS_KINETIS_I2C1
-#define HAS_KINETIS_I2C1_STOPF
-#define HAS_KINETIS_I2C2
-#define HAS_KINETIS_I2C2_STOPF
-#define HAS_KINETIS_LLWU_16CH
-#define HAS_KINETIS_MPU
-#define HAS_KINETIS_ADC0
-#define HAS_KINETIS_ADC1
-#define HAS_KINETIS_FLASH_FTFE
-#define HAS_KINETIS_SDHC
-
-
-#elif defined(__MK66FX1M0__)
 // https://forum.pjrc.com/threads/24633-Any-Chance-of-a-Teensy-3-1?p=78655&viewfull=1#post78655
 enum IRQ_NUMBER_t {
 	IRQ_DMA_CH0 =		0,
@@ -757,109 +236,11 @@ enum IRQ_NUMBER_t {
 #define HAS_KINETIS_SDHC
 #define HAS_KINETIS_HSRUN
 
-
-
-#endif // end of board-specific definitions
-
-#if (F_CPU == 256000000)
- #define F_PLL 256000000
- #ifndef F_BUS
- #define F_BUS 64000000
- //#define F_BUS 128000000  // all the usual overclocking caveats apply...
- #endif
- #define F_MEM 32000000
-#elif (F_CPU == 240000000)
- #define F_PLL 240000000
- #ifndef F_BUS
- #define F_BUS 60000000
- //#define F_BUS 80000000   // uncomment these to try peripheral overclocking
- //#define F_BUS 120000000  // all the usual overclocking caveats apply...
- #endif
- #define F_MEM 30000000
-#elif (F_CPU == 216000000)
- #define F_PLL 216000000
- #ifndef F_BUS
- #define F_BUS 54000000
- //#define F_BUS 72000000
- //#define F_BUS 108000000
- #endif
- #define F_MEM 27000000
-#elif (F_CPU == 192000000)
- #define F_PLL 192000000
- #ifndef F_BUS
- #define F_BUS 48000000
- //#define F_BUS 64000000
- //#define F_BUS 96000000
- #endif
- #define F_MEM 27428571
-#elif (F_CPU == 180000000)
- #define F_PLL 180000000
- #ifndef F_BUS
- #define F_BUS 60000000
- //#define F_BUS 90000000
- #endif
- #define F_MEM 25714286
-#elif (F_CPU == 168000000)
- #define F_PLL 168000000
- #define F_BUS 56000000
- #define F_MEM 28000000
-#elif (F_CPU == 144000000)
- #define F_PLL 144000000
- #ifndef F_BUS
- #define F_BUS 48000000
- //#define F_BUS 72000000
- #endif
- #define F_MEM 28800000
-#elif (F_CPU == 120000000)
- #define F_PLL 120000000
- #ifndef F_BUS
- #define F_BUS 60000000
- //#define F_BUS 120000000
- #endif
- #define F_MEM 24000000
-#elif (F_CPU == 96000000)
- #define F_PLL 96000000
- #ifndef F_BUS
- #define F_BUS 48000000
- //#define F_BUS 96000000
- #endif
- #define F_MEM 24000000
-#elif (F_CPU == 72000000)
- #define F_PLL 72000000
- #ifndef F_BUS
- #define F_BUS 36000000
- //#define F_BUS 72000000
- #endif
- #define F_MEM 24000000
-#elif (F_CPU == 48000000)
- #define F_PLL 96000000
- #if defined(KINETISK)
- #define F_BUS 48000000
- #elif defined(KINETISL)
- #define F_BUS 24000000
- #endif
- #define F_MEM 24000000
-#elif (F_CPU == 24000000)
- #define F_PLL 96000000
- #define F_BUS 24000000
- #define F_MEM 24000000
-#elif (F_CPU == 16000000)
- #define F_PLL 16000000
- #define F_BUS 16000000
- #define F_MEM 16000000
-#elif (F_CPU == 8000000)
- #define F_PLL 8000000
- #define F_BUS 8000000
- #define F_MEM 8000000
-#elif (F_CPU == 4000000)
- #define F_PLL 4000000
- #define F_BUS 4000000
- #define F_MEM 4000000
-#elif (F_CPU == 2000000)
- #define F_PLL 2000000
- #define F_BUS 2000000
- #define F_MEM 1000000
+#define F_PLL 180000000
+#ifndef F_BUS
+#define F_BUS 60000000
 #endif
+#define F_MEM 25714286
 
 
 #ifndef NULL
@@ -1170,14 +551,12 @@ enum IRQ_NUMBER_t {
 #define SIM_SCGC1_I2C3			((uint32_t)0x00000080)		// I2C3 Clock Gate Control
 #define SIM_SCGC1_I2C2			((uint32_t)0x00000040)		// I2C2 Clock Gate Control
 #define SIM_SCGC2		(*(volatile uint32_t *)0x4004802C) // System Clock Gating Control Register 2
-#if defined(KINETISK)
 #define SIM_SCGC2_DAC1			((uint32_t)0x00002000)		// DAC1 Clock Gate Control
 #define SIM_SCGC2_DAC0			((uint32_t)0x00001000)		// DAC0 Clock on APIS1 (base addr 400CC000)
 #define SIM_SCGC2_TPM2			((uint32_t)0x00000400)		// TPM2 Clock Gate Control
 #define SIM_SCGC2_TPM1			((uint32_t)0x00000200)		// TPM1 Clock Gate Control
 #define SIM_SCGC2_LPUART0		((uint32_t)0x00000010)		// LPUART0 Clock Gate Control
 #define SIM_SCGC2_ENET			((uint32_t)0x00000001)		// Ethernet Clock Gate Control
-#endif
 #define SIM_SCGC3		(*(volatile uint32_t *)0x40048030) // System Clock Gating Control Register 3
 #define SIM_SCGC3_ADC1			((uint32_t)0x08000000)		// ADC1 Clock Gate Control
 #define SIM_SCGC3_FTM3			((uint32_t)0x02000000)		// FTM3 Clock Gate Control
@@ -1201,10 +580,6 @@ enum IRQ_NUMBER_t {
 #define SIM_SCGC4_I2C0			((uint32_t)0x00000040)		// I2C0 Clock Gate Control
 #define SIM_SCGC4_CMT			((uint32_t)0x00000004)		// CMT Clock Gate Control
 #define SIM_SCGC4_EWM			((uint32_t)0x00000002)		// EWM Clock Gate Control
-#ifdef KINETISL
-#define SIM_SCGC4_SPI1			((uint32_t)0x00800000)		//
-#define SIM_SCGC4_SPI0			((uint32_t)0x00400000)		//
-#endif
 #define SIM_SCGC5		(*(volatile uint32_t *)0x40048038) // System Clock Gating Control Register 5
 #define SIM_SCGC5_PORTE			((uint32_t)0x00002000)		// Port E Clock Gate Control
 #define SIM_SCGC5_PORTD			((uint32_t)0x00001000)		// Port D Clock Gate Control
@@ -1214,12 +589,6 @@ enum IRQ_NUMBER_t {
 #define SIM_SCGC5_TSI			((uint32_t)0x00000020)		// Touch Sense Input TSI Clock Gate Control
 #define SIM_SCGC5_LPTIMER		((uint32_t)0x00000001)		// Low Power Timer Access Control
 #define SIM_SCGC6		(*(volatile uint32_t *)0x4004803C) // System Clock Gating Control Register 6
-#if defined(KINETISL)
-#define SIM_SCGC6_DAC0			((uint32_t)0x80000000)		// DAC on Kinetis-L
-#define SIM_SCGC6_TPM2			((uint32_t)0x04000000)		// FTM2 Clock Gate Control
-#define SIM_SCGC6_TPM1			((uint32_t)0x02000000)		// FTM1 Clock Gate Control
-#define SIM_SCGC6_TPM0			((uint32_t)0x01000000)		// FTM0 Clock Gate Control
-#elif defined(KINETISK)
 //#define SIM_SCGC6_DAC0		((uint32_t)0x80000000)		// DAC0 Clock on APIS0 (base addr 4003F000)
 //#define SIM_SCGC6_FTM2		((uint32_t)0x04000000)		// FTM2 Clock on APIS0 (base addr 4003A000)
 #define SIM_SCGC6_PDB			((uint32_t)0x00400000)		// PDB Clock Gate Control
@@ -1229,7 +598,6 @@ enum IRQ_NUMBER_t {
 #define SIM_SCGC6_RNGA			((uint32_t)0x00000200)		// RNGA Clock on APIS0 (base addr 40029000)
 #define SIM_SCGC6_FLEXCAN0		((uint32_t)0x00000010)		// FlexCAN0 Clock Gate Control
 #define SIM_SCGC6_CRC			((uint32_t)0x00040000)		// CRC Clock Gate Control
-#endif
 #define SIM_SCGC6_RTC			((uint32_t)0x20000000)		// RTC Access
 #define SIM_SCGC6_ADC0			((uint32_t)0x08000000)		// ADC0 Clock Gate Control
 #define SIM_SCGC6_FTM1			((uint32_t)0x02000000)		// FTM1 Clock Gate Control
@@ -1239,14 +607,10 @@ enum IRQ_NUMBER_t {
 #define SIM_SCGC6_DMAMUX		((uint32_t)0x00000002)		// DMA Mux Clock Gate Control
 #define SIM_SCGC6_FTFL			((uint32_t)0x00000001)		// Flash Memory Clock Gate Control
 #define SIM_SCGC7		(*(volatile uint32_t *)0x40048040) // System Clock Gating Control Register 7
-#if defined(KINETISK)
 #define SIM_SCGC7_SDRAMC		((uint32_t)0x00000008)		// SDRAM Clock Gate Control
 #define SIM_SCGC7_MPU			((uint32_t)0x00000004)		// MPU Clock Gate Control
 #define SIM_SCGC7_DMA			((uint32_t)0x00000002)		// DMA Clock Gate Control
 #define SIM_SCGC7_FLEXBUS		((uint32_t)0x00000001)		// FLEXBUS Clock Gate Control
-#elif defined(KINETISL)
-#define SIM_SCGC7_DMA			((uint32_t)0x00000100)		// DMA Clock Gate Control
-#endif
 #define SIM_CLKDIV1		(*(volatile uint32_t *)0x40048044) // System Clock Divider Register 1
 #define SIM_CLKDIV1_OUTDIV1(n)		((uint32_t)(((n) & 0x0F) << 28)) // divide value for the core/system clock
 #define SIM_CLKDIV1_OUTDIV2(n)		((uint32_t)(((n) & 0x0F) << 24)) // divide value for the peripheral clock
@@ -1316,13 +680,11 @@ enum IRQ_NUMBER_t {
 #define SMC_VLLSCTRL_PORPO		((uint8_t)0x20)			// POR Power Option
 #define SMC_VLLSCTRL_VLLSM(n)		((uint8_t)((n) & 0x07))		// VLLS Mode Control
 
-#if defined(__MK66FX1M0__)
 #define SMC_STOPCTRL			SMC_VLLSCTRL // Stop Control Register (compatible to SMC_VLLSCTRL)
 #define SMC_STOPCTRL_PSTOPO(n)	((uint8_t)(((n) & 0x03) << 6)) 		// Partial Stop Option
 #define SMC_STOPCTRL_PORPO		SMC_VLLSCTRL_PORPO		// POR Power Option
 #define SMC_STOPCTRL_RAM2PO		((uint8_t)0x10)			// RAM2 Power Option
 #define SMC_STOPCTRL_LLSM(n)		SMC_VLLSCTRL_VLLSM(n)		// VLLS Mode Control
-#endif
 
 #define SMC_PMSTAT		(*(volatile uint8_t  *)0x4007E003) // Power Mode Status Register
 #define SMC_PMSTAT_RUN			((uint8_t)0x01)			// Current power mode is RUN
@@ -3949,7 +3311,7 @@ typedef struct {
 #define USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN		((uint8_t)0x80)
 #define USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN	((uint8_t)0x40)
 #define USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN		((uint8_t)0x20)
-#define USB0_CLK_RECOVER_IRC_EN	(*(volatile uint8_t  *)0x40072144) // IRC48M oscillator enable 
+#define USB0_CLK_RECOVER_IRC_EN	(*(volatile uint8_t  *)0x40072144) // IRC48M oscillator enable
 #define USB_CLK_RECOVER_IRC_EN_IRC_EN			((uint8_t)0x02)
 #define USB_CLK_RECOVER_IRC_EN_REG_EN			((uint8_t)0x01)
 #define USB0_CLK_RECOVER_INT_EN	(*(volatile uint8_t  *)0x40072154) // Clock recovery combined interrupt enable
@@ -4434,7 +3796,6 @@ typedef struct {
 #define SPI0_RXFR2		(KINETISK_SPI0.RXFR[2])	// DSPI Receive FIFO Registers
 #define SPI0_RXFR3		(KINETISK_SPI0.RXFR[3])	// DSPI Receive FIFO Registers
 
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__)
 #define KINETISK_SPI1		(*(KINETISK_SPI_t *)0x4002D000)
 #define SPI1_MCR		(KINETISK_SPI1.MCR)	// DSPI Module Configuration Register
 #define SPI1_TCR		(KINETISK_SPI1.TCR)	// DSPI Transfer Count Register
@@ -4475,7 +3836,6 @@ typedef struct {
 #define SPI2_RXFR2		(KINETISK_SPI2.RXFR[2])	// DSPI Receive FIFO Registers
 #define SPI2_RXFR3		(KINETISK_SPI2.RXFR[3])	// DSPI Receive FIFO Registers
 
-#endif
 #elif defined(KINETISL)
 typedef struct {
 	volatile uint8_t	S;
@@ -5330,7 +4690,7 @@ typedef struct __attribute__((packed)) {
 #define LPUART_BAUD_TDMAE		((uint32_t)0x00800000)		// Transmitter Dma Enable
 #define LPUART_BAUD_RDMAE		((uint32_t)0x00400000)		// Receiver Dma Enable
 #define LPUART_BAUD_BOTHEDGE	((uint32_t)0x00020000)		// Both edge sampling needed OSR 4-7
-#define LPUART_BAUD_SBNS		((uint32_t)0x00002000)		// UART Stop Bit Number Select 
+#define LPUART_BAUD_SBNS		((uint32_t)0x00002000)		// UART Stop Bit Number Select
 #define LPUART_BAUD_SBR(n)		((uint32_t)((n) & 0x1fff) << 0) // set baud rate divisor
 
 #define LPUART0_STAT		(KINETISK_LPUART0.STAT)		// LPUART Status register

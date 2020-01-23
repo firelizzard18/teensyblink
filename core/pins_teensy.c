@@ -111,8 +111,6 @@ void attachInterruptVector(enum IRQ_NUMBER_t irq, void (*function)(void))
 	_VectorsRam[irq + 16] = function;
 }
 
-typedef void (*voidFuncPtr)(void);
-
 #define F_TIMER F_BUS
 #define DEFAULT_FTM_MOD (61440 - 1)
 #define DEFAULT_FTM_PRESCALE 1
