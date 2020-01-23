@@ -2,21 +2,14 @@
 
 const int ledPin = 13;
 
-// the setup() method runs once, when the sketch starts
-
-void setup() {
-  // initialize the digital pin as an output.
-  pinMode(ledPin, OUTPUT);
+extern "C" int main(void)
+{
+    pinMode(ledPin, OUTPUT);
+    while (1) {
+        digitalWriteFast(ledPin, HIGH);
+        delay(500);
+        digitalWriteFast(ledPin, LOW);
+        delay(500);
+    }
 }
-
-// the loop() methor runs over and over again,
-// as long as the board has power
-
-void loop() {
-  digitalWrite(ledPin, HIGH);   // set the LED on
-  delay(500);                  // wait for a second
-  digitalWrite(ledPin, LOW);    // set the LED off
-  delay(500);                  // wait for a second
-}
-
 
