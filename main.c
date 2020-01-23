@@ -26,3 +26,8 @@ void systick_isr(void)
 {
 	systick_millis_count++;
 }
+
+void __doNotStripVectors()
+{
+	_VectorsRam[16] = NULL;
+}

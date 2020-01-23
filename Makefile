@@ -5,6 +5,7 @@ CC=$(ARM_BIN)/arm-none-eabi-gcc
 CXX=$(ARM_BIN)/arm-none-eabi-g++
 AR=$(ARM_BIN)/arm-none-eabi-gcc-ar
 OBJCOPY=$(ARM_BIN)/arm-none-eabi-objcopy
+OBJDUMP=$(ARM_BIN)/arm-none-eabi-objdump
 
 FLAGS=-g -Wall -ffunction-sections -fdata-sections -nostdlib
 CFLAGS=-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -D__MK66FX1M0__ -DTEENSYDUINO=146 -DARDUINO=10809 -DF_CPU=180000000 -DUSB_SERIAL -DLAYOUT_US_ENGLISH
@@ -43,6 +44,12 @@ build/main.elf: build/main.c.o build/core.a
 
 build/main.hex: build/main.elf
 	$(OBJCOPY) -O ihex -R .eeprom $^ $@
+
+build/main.lst: build/main.elf
+	$(OBJDUMP) -d -C $^ > $@
+
+build/main.sym: build/main.elf
+	$(OBJDUMP) -t -C $^ > $@
 
 PORT=usb:14600000
 PORTLABEL=/dev/cu.usbmodem58507401 Serial

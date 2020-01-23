@@ -106,11 +106,6 @@ const struct digital_pin_bitband_and_config_table_struct digital_pin_to_info_PGM
 #endif
 };
 
-void attachInterruptVector(enum IRQ_NUMBER_t irq, void (*function)(void))
-{
-	_VectorsRam[irq + 16] = function;
-}
-
 #define F_TIMER F_BUS
 #define DEFAULT_FTM_MOD (61440 - 1)
 #define DEFAULT_FTM_PRESCALE 1
