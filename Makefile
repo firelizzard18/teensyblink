@@ -13,7 +13,7 @@ CXXFLAGS=-fno-exceptions -fpermissive -felide-constructors -std=gnu++14 -Wno-err
 LDFLAGS=-Wl,--gc-sections,--relax,--defsym=__rtc_localtime=1579708172 -lstdc++ -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -larm_cortexM4lf_math -lm -L./build
 
 # CORE=AudioStream.cpp DMAChannel.cpp EventResponder.cpp HardwareSerial1.cpp HardwareSerial2.cpp HardwareSerial3.cpp HardwareSerial4.cpp HardwareSerial5.cpp HardwareSerial6.cpp IPAddress.cpp IntervalTimer.cpp Print.cpp Stream.cpp Tone.cpp WMath.cpp WString.cpp analog.c avr_emulation.cpp eeprom.c keylayouts.c main.cpp math_helper.c memcpy-armv7m.S memset.S mk20dx128.c new.cpp nonstd.c pins_teensy.c ser_print.c serial1.c serial2.c serial3.c serial4.c serial5.c serial6.c serial6_lpuart.c touch.c usb_audio.cpp usb_desc.c usb_dev.c usb_flightsim.cpp usb_inst.cpp usb_joystick.c usb_keyboard.c usb_mem.c usb_midi.c usb_mouse.c usb_mtp.c usb_rawhid.c usb_seremu.c usb_serial.c usb_touch.c yield.cpp
-CORE=memcpy-armv7m.S memset.S mk20dx128.c pins_teensy.c
+CORE=mk20dx128.c pins_teensy.c
 
 all: build/main.hex
 
