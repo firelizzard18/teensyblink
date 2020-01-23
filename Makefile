@@ -47,6 +47,6 @@ build/main.hex: build/main.elf
 PORT=usb:14600000
 PORTLABEL=/dev/cu.usbmodem58507401 Serial
 load: build/main.hex
-	$(ARDUINO)/hardware/tools/teensy_post_compile -file=main -path=$(shell pwd)/build -tools=$(ARDUINO)/hardware/tools -board=TEENSY36
-	-$(ARDUINO)/hardware/tools/teensy_reboot 2> /dev/null
+	$(ARDUINO)/hardware/tools/teensy_post_compile -file=main -path=$(shell pwd)/build -tools=$(ARDUINO)/hardware/tools -board=TEENSY36 -reboot -port=usb:14600000 -portlabel="(null)" -portprotocol=Teensy
+	# -$(ARDUINO)/hardware/tools/teensy_reboot 2> /dev/null
 	# $(ARDUINO)/hardware/tools/teensy_loader_cli -mmcu=mk66fx1m0 -v -w $<
