@@ -1,23 +1,20 @@
-#include <Arduino.h>
-
-#include "core_pins.h"
-#include "pins_arduino.h"
+// #include "core_pins.h"
+// #include "pins_arduino.h"
+#include "kinetis.h"
 
 const int ledPin = 13;
 
 int main(void)
 {
-	volatile uint32_t *config = portConfigRegister(ledPin);
-
-    *portModeRegister(ledPin) = 1;
-    *config = PORT_PCR_SRE | PORT_PCR_DSE | PORT_PCR_MUX(1);
-    *config &= ~PORT_PCR_ODE;
+    GPIOC_PDDR |= 1<<5;
+    PORTC_PCR5 |= PORT_PCR_SRE | PORT_PCR_DSE | PORT_PCR_MUX(1);
+    PORTC_PCR5 &= ~PORT_PCR_ODE;
 
     while (1) {
-        CORE_PIN13_PORTSET = CORE_PIN13_BITMASK;
-        delay(500);
-        CORE_PIN13_PORTCLEAR = CORE_PIN13_BITMASK;
-        delay(500);
+        GPIOC_PCOR = 1<<5;
+        for (int i = 0; i < 1<<21; i++) __asm__ volatile ("nop");
+        GPIOC_PSOR = 1<<5;
+        for (int i = 0; i < 1<<21; i++) __asm__ volatile ("nop");
     }
 }
 

@@ -29,8 +29,6 @@
  */
 
 #include "kinetis.h"
-#include "core_pins.h" // testing only
-#include "ser_print.h" // testing only
 #include <errno.h>
 
 
@@ -332,6 +330,7 @@ const uint8_t flashconfigbytes[16] = {
 	0xFF, 0xFF, 0xFF, 0xFF, FSEC, FOPT, 0xFF, 0xFF
 };
 
+static inline void startup_preinit();
 
 static void startup_default_early_hook(void) {
 	WDOG_STCTRLH = WDOG_STCTRLH_ALLOWUPDATE;
@@ -350,11 +349,6 @@ __attribute__ ((section(".startup"),optimize("-Os")))
 #endif
 void ResetHandler(void)
 {
-	uint32_t *src = &_etext;
-	uint32_t *dest = &_sdata;
-	unsigned int i;
-	//volatile int count;
-
 	WDOG_UNLOCK = WDOG_UNLOCK_SEQ1;
 	WDOG_UNLOCK = WDOG_UNLOCK_SEQ2;
 	__asm__ volatile ("nop");
@@ -377,15 +371,7 @@ void ResetHandler(void)
     // so we can into other sleep modes in the future at any speed
 	SMC_PMPROT = SMC_PMPROT_AHSRUN | SMC_PMPROT_AVLP | SMC_PMPROT_ALLS | SMC_PMPROT_AVLLS;
 
-	// TODO: do this while the PLL is waiting to lock....
-	while (dest < &_edata) *dest++ = *src++;
-	dest = &_sbss;
-	while (dest < &_ebss) *dest++ = 0;
-
-	// default all interrupts to medium priority level
-	for (i=0; i < NVIC_NUM_INTERRUPTS + 16; i++) _VectorsRam[i] = _VectorsFlash[i];
-	for (i=0; i < NVIC_NUM_INTERRUPTS; i++) NVIC_SET_PRIORITY(i, 128);
-	SCB_VTOR = (uint32_t)_VectorsRam;	// use vector table in RAM
+	// startup_preinit();
 
 	// hardware always starts in FEI mode
 	//  C1[CLKS] bits are written to 00
@@ -406,64 +392,19 @@ void ResetHandler(void)
 	// wait for MCGOUT to use oscillator
 	while ((MCG_S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2)) ;
 
-	// now in FBE mode
-	//  C1[CLKS] bits are written to 10
-	//  C1[IREFS] bit is written to 0
-	//  C1[FRDIV] must be written to divide xtal to 31.25-39 kHz
-	//  C6[PLLS] bit is written to 0
-	//  C2[LP] is written to 0
-	// if we need faster than the crystal, turn on the PLL
-    #if F_CPU > 120000000
-	SMC_PMCTRL = SMC_PMCTRL_RUNM(3); // enter HSRUN mode
-	while (SMC_PMSTAT != SMC_PMSTAT_HSRUN) ; // wait for HSRUN
-    #endif
-	MCG_C5 = MCG_C5_PRDIV0(1);
-	MCG_C6 = MCG_C6_PLLS | MCG_C6_VDIV0(29);
-
-	// wait for PLL to start using xtal as its input
-	while (!(MCG_S & MCG_S_PLLST)) ;
-	// wait for PLL to lock
-	while (!(MCG_S & MCG_S_LOCK0)) ;
-	// now we're in PBE mode
-
-	// now program the clock dividers
-	// config divisors: 180 MHz core, 60 MHz bus, 25.7 MHz flash, USB = IRC48M
-	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(2) | SIM_CLKDIV1_OUTDIV4(6);
-	SIM_CLKDIV2 = SIM_CLKDIV2_USBDIV(0);
-
-	// switch to PLL as clock source, FLL input = 16 MHz / 512
-	MCG_C1 = MCG_C1_CLKS(0) | MCG_C1_FRDIV(4);
-	// wait for PLL clock to be used
-	while ((MCG_S & MCG_S_CLKST_MASK) != MCG_S_CLKST(3)) ;
-	// now we're in PEE mode
-	// trace is CPU clock, CLKOUT=OSCERCLK0
-	// USB uses IRC48
-	SIM_SOPT2 = SIM_SOPT2_USBSRC | SIM_SOPT2_IRC48SEL | SIM_SOPT2_TRACECLKSEL | SIM_SOPT2_CLKOUTSEL(6);
-
-	// If the RTC oscillator isn't enabled, get it started.  For Teensy 3.6
-	// we don't do this early.  See comment above about slow rising power.
-	if (!(RTC_CR & RTC_CR_OSCE)) {
-		RTC_SR = 0;
-		RTC_CR = RTC_CR_SC16P | RTC_CR_SC4P | RTC_CR_OSCE;
-	}
-
-	// initialize the SysTick counter
-	SYST_RVR = (F_CPU / 1000) - 1;
-	SYST_CVR = 0;
-	SYST_CSR = SYST_CSR_CLKSOURCE | SYST_CSR_TICKINT | SYST_CSR_ENABLE;
-	SCB_SHPR3 = 0x20200000;  // Systick = priority 32
-
-	//init_pins();
-	__enable_irq();
-
-	_init_Teensyduino_internal_();
-
-	__libc_init_array();
-
-	startup_late_hook();
 	main();
 
 	while (1) ;
+}
+
+static inline void startup_preinit() {
+	uint32_t *src = &_etext;
+	uint32_t *dest = &_sdata;
+
+	// TODO: do this while the PLL is waiting to lock....
+	while (dest < &_edata) *dest++ = *src++;
+	dest = &_sbss;
+	while (dest < &_ebss) *dest++ = 0;
 }
 
 char *__brkval = (char *)&_ebss;
@@ -491,62 +432,7 @@ void * _sbrk(int incr)
 	return prev;
 }
 
-__attribute__((weak))
-int _read(int file, char *ptr, int len)
-{
-	return 0;
-}
-
-__attribute__((weak))
-int _close(int fd)
-{
-	return -1;
-}
-
 #include <sys/stat.h>
-
-__attribute__((weak))
-int _fstat(int fd, struct stat *st)
-{
-	st->st_mode = S_IFCHR;
-	return 0;
-}
-
-__attribute__((weak))
-int _isatty(int fd)
-{
-	return 1;
-}
-
-__attribute__((weak))
-int _lseek(int fd, long long offset, int whence)
-{
-	return -1;
-}
-
-__attribute__((weak))
-void _exit(int status)
-{
-	while (1);
-}
-
-__attribute__((weak))
-void __cxa_pure_virtual()
-{
-	while (1);
-}
-
-__attribute__((weak))
-int __cxa_guard_acquire (char *g)
-{
-	return !(*g);
-}
-
-__attribute__((weak))
-void __cxa_guard_release(char *g)
-{
-	*g = 1;
-}
 
 __attribute__((weak))
 void abort(void)
