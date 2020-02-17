@@ -12,16 +12,10 @@ int main(void)
 
     while (1) {
         GPIOC_PCOR = 1<<5;
-        for (int i = 0; i < 1<<21; i++) __asm__ volatile ("nop");
+        for (int i = 0; i < 1<<24; i++) __asm__ volatile ("nop");
         GPIOC_PSOR = 1<<5;
-        for (int i = 0; i < 1<<21; i++) __asm__ volatile ("nop");
+        for (int i = 0; i < 1<<24; i++) __asm__ volatile ("nop");
     }
-}
-
-volatile uint32_t systick_millis_count;
-void systick_isr(void)
-{
-	systick_millis_count++;
 }
 
 void __doNotStripVectors()

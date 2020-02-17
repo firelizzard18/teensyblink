@@ -64,19 +64,17 @@ extern unsigned long _estack;
 
 extern int main (void);
 void ResetHandler(void);
-void _init_Teensyduino_internal_(void) __attribute__((noinline));
-void __libc_init_array(void);
 
 
 void fault_isr(void)
 {
 	while (1) {
-		// keep polling some communication while in fault
-		// mode, so we don't completely die.
-		if (SIM_SCGC4 & SIM_SCGC4_USBOTG) usb_isr();
-		if (SIM_SCGC4 & SIM_SCGC4_UART0) uart0_status_isr();
-		if (SIM_SCGC4 & SIM_SCGC4_UART1) uart1_status_isr();
-		if (SIM_SCGC4 & SIM_SCGC4_UART2) uart2_status_isr();
+		// // keep polling some communication while in fault
+		// // mode, so we don't completely die.
+		// if (SIM_SCGC4 & SIM_SCGC4_USBOTG) usb_isr();
+		// if (SIM_SCGC4 & SIM_SCGC4_UART0) uart0_status_isr();
+		// if (SIM_SCGC4 & SIM_SCGC4_UART1) uart1_status_isr();
+		// if (SIM_SCGC4 & SIM_SCGC4_UART2) uart2_status_isr();
 	}
 }
 
@@ -93,7 +91,7 @@ void usage_fault_isr(void)	__attribute__ ((weak, alias("fault_isr")));
 void svcall_isr(void)		__attribute__ ((weak, alias("unused_isr")));
 void debugmonitor_isr(void)	__attribute__ ((weak, alias("unused_isr")));
 void pendablesrvreq_isr(void)	__attribute__ ((weak, alias("unused_isr")));
-void systick_isr(void);
+void systick_isr(void)	__attribute__ ((weak, alias("unused_isr")));
 
 void dma_ch0_isr(void)		__attribute__ ((weak, alias("unused_isr")));
 void dma_ch1_isr(void)		__attribute__ ((weak, alias("unused_isr")));
@@ -332,14 +330,6 @@ const uint8_t flashconfigbytes[16] = {
 
 static inline void startup_preinit();
 
-static void startup_default_early_hook(void) {
-	WDOG_STCTRLH = WDOG_STCTRLH_ALLOWUPDATE;
-}
-static void startup_default_late_hook(void) {}
-void startup_early_hook(void)		__attribute__ ((weak, alias("startup_default_early_hook")));
-void startup_late_hook(void)		__attribute__ ((weak, alias("startup_default_late_hook")));
-
-
 #if defined(__PURE_CODE__) || !defined(__OPTIMIZE__) || defined(__clang__)
 // cases known to compile too large for 0-0x400 memory region
 __attribute__ ((optimize("-Os")))
@@ -353,9 +343,7 @@ void ResetHandler(void)
 	WDOG_UNLOCK = WDOG_UNLOCK_SEQ2;
 	__asm__ volatile ("nop");
 	__asm__ volatile ("nop");
-	// programs using the watchdog timer or needing to initialize hardware as
-	// early as possible can implement startup_early_hook()
-	startup_early_hook();
+	WDOG_STCTRLH = WDOG_STCTRLH_ALLOWUPDATE;
 
 	// enable clocks to always-used peripherals
 	SIM_SCGC3 = SIM_SCGC3_ADC1 | SIM_SCGC3_FTM2 | SIM_SCGC3_FTM3;
@@ -392,6 +380,53 @@ void ResetHandler(void)
 	// wait for MCGOUT to use oscillator
 	while ((MCG_S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2)) ;
 
+	// now in FBE mode
+	//  C1[CLKS] bits are written to 10
+	//  C1[IREFS] bit is written to 0
+	//  C1[FRDIV] must be written to divide xtal to 31.25-39 kHz
+	//  C6[PLLS] bit is written to 0
+	//  C2[LP] is written to 0
+	// if we need faster than the crystal, turn on the PLL
+    #if F_CPU > 120000000
+	SMC_PMCTRL = SMC_PMCTRL_RUNM(3); // enter HSRUN mode
+	while (SMC_PMSTAT != SMC_PMSTAT_HSRUN) ; // wait for HSRUN
+    #endif
+	MCG_C5 = MCG_C5_PRDIV0(1);
+	MCG_C6 = MCG_C6_PLLS | MCG_C6_VDIV0(29);
+
+	// wait for PLL to start using xtal as its input
+	while (!(MCG_S & MCG_S_PLLST)) ;
+	// wait for PLL to lock
+	while (!(MCG_S & MCG_S_LOCK0)) ;
+	// now we're in PBE mode
+
+	// now program the clock dividers
+	// config divisors: 180 MHz core, 60 MHz bus, 25.7 MHz flash, USB = IRC48M
+	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(2) | SIM_CLKDIV1_OUTDIV4(6);
+	SIM_CLKDIV2 = SIM_CLKDIV2_USBDIV(0);
+
+	// switch to PLL as clock source, FLL input = 16 MHz / 512
+	MCG_C1 = MCG_C1_CLKS(0) | MCG_C1_FRDIV(4);
+	// wait for PLL clock to be used
+	while ((MCG_S & MCG_S_CLKST_MASK) != MCG_S_CLKST(3)) ;
+	// now we're in PEE mode
+	// trace is CPU clock, CLKOUT=OSCERCLK0
+	// USB uses IRC48
+	SIM_SOPT2 = SIM_SOPT2_USBSRC | SIM_SOPT2_IRC48SEL | SIM_SOPT2_TRACECLKSEL | SIM_SOPT2_CLKOUTSEL(6);
+
+	// If the RTC oscillator isn't enabled, get it started.  For Teensy 3.6
+	// we don't do this early.  See comment above about slow rising power.
+	if (!(RTC_CR & RTC_CR_OSCE)) {
+		RTC_SR = 0;
+		RTC_CR = RTC_CR_SC16P | RTC_CR_SC4P | RTC_CR_OSCE;
+	}
+
+	// // initialize the SysTick counter
+	// SYST_RVR = (F_CPU / 1000) - 1;
+	// SYST_CVR = 0;
+	// SYST_CSR = SYST_CSR_CLKSOURCE | SYST_CSR_TICKINT | SYST_CSR_ENABLE;
+	// SCB_SHPR3 = 0x20200000;  // Systick = priority 32
+
 	main();
 
 	while (1) ;
@@ -405,60 +440,4 @@ static inline void startup_preinit() {
 	while (dest < &_edata) *dest++ = *src++;
 	dest = &_sbss;
 	while (dest < &_ebss) *dest++ = 0;
-}
-
-char *__brkval = (char *)&_ebss;
-
-#ifndef STACK_MARGIN
-#define STACK_MARGIN  8192
-#endif
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-void * _sbrk(int incr)
-{
-	char *prev, *stack;
-
-	prev = __brkval;
-	if (incr != 0) {
-		__asm__ volatile("mov %0, sp" : "=r" (stack) ::);
-		if (prev + incr >= stack - STACK_MARGIN) {
-			errno = ENOMEM;
-			return (void *)-1;
-		}
-		__brkval = prev + incr;
-	}
-	return prev;
-}
-
-#include <sys/stat.h>
-
-__attribute__((weak))
-void abort(void)
-{
-	while (1) ;
-}
-
-#pragma GCC diagnostic pop
-
-int nvic_execution_priority(void)
-{
-	uint32_t priority=256;
-	uint32_t primask, faultmask, basepri, ipsr;
-
-	// full algorithm in ARM DDI0403D, page B1-639
-	// this isn't quite complete, but hopefully good enough
-	__asm__ volatile("mrs %0, faultmask\n" : "=r" (faultmask)::);
-	if (faultmask) return -1;
-	__asm__ volatile("mrs %0, primask\n" : "=r" (primask)::);
-	if (primask) return 0;
-	__asm__ volatile("mrs %0, ipsr\n" : "=r" (ipsr)::);
-	if (ipsr) {
-		if (ipsr < 16) priority = 0; // could be non-zero
-		else priority = NVIC_GET_PRIORITY(ipsr - 16);
-	}
-	__asm__ volatile("mrs %0, basepri\n" : "=r" (basepri)::);
-	if (basepri > 0 && basepri < priority) priority = basepri;
-	return priority;
 }
