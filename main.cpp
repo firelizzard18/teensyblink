@@ -203,9 +203,7 @@ int main() {
 
         // serial_write(messages_alt, messages_alt_pos);
 
-        char buf[100];
-        int l = snprintf(buf, 100, "Hello world!");
-        usb_serial_write(buf, l);
+        usb_serial_write(".", 1);
 
         CORE_PIN13_PORTSET = CORE_PIN13_BITMASK;
         delay(500);

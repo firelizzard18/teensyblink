@@ -31,12 +31,7 @@
 #include "usb_dev.h"
 #include "usb_serial.h"
 #include "core_pins.h" // for yield()
-//#include "HardwareSerial.h"
 #include <string.h> // for memcpy()
-
-// defined by usb_dev.h -> usb_desc.h
-#if defined(CDC_STATUS_INTERFACE) && defined(CDC_DATA_INTERFACE)
-#if F_CPU >= 20000000
 
 uint32_t usb_cdc_line_coding[2];
 volatile uint32_t usb_cdc_line_rtsdtr_millis;
@@ -148,31 +143,7 @@ void usb_serial_flush_input(void)
 // too short, we risk losing data during the stalls that are common with ordinary desktop
 // software.  If it's too long, we stall the user's program when no software is running.
 #define TX_TIMEOUT_MSEC 70
-#if F_CPU == 256000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1706)
-#elif F_CPU == 240000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1600)
-#elif F_CPU == 216000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1440)
-#elif F_CPU == 192000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1280)
-#elif F_CPU == 180000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1200)
-#elif F_CPU == 168000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1100)
-#elif F_CPU == 144000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 932)
-#elif F_CPU == 120000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 764)
-#elif F_CPU == 96000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 596)
-#elif F_CPU == 72000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 512)
-#elif F_CPU == 48000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 428)
-#elif F_CPU == 24000000
-  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 262)
-#endif
+#define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1200)
 
 // When we've suffered the transmit timeout, don't wait again until the computer
 // begins accepting data.  If no software is running to receive, we'll just discard
@@ -297,9 +268,3 @@ void usb_serial_flush_callback(void)
 		}
 	}
 }
-
-
-
-
-#endif // F_CPU
-#endif // CDC_STATUS_INTERFACE && CDC_DATA_INTERFACE
