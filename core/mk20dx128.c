@@ -30,7 +30,6 @@
 
 #include "kinetis.h"
 #include "core_pins.h" // testing only
-#include "ser_print.h" // testing only
 #include <errno.h>
 
 
@@ -764,7 +763,7 @@ void ResetHandler(void)
 #else
 	SMC_PMPROT = SMC_PMPROT_AVLP | SMC_PMPROT_ALLS | SMC_PMPROT_AVLLS;
 #endif
-    
+
 	// TODO: do this while the PLL is waiting to lock....
 	while (dest < &_edata) *dest++ = *src++;
 	dest = &_sbss;
@@ -939,8 +938,8 @@ void ResetHandler(void)
 	#elif F_BUS == 72000000
 	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(2) | SIM_CLKDIV1_OUTDIV4(7);
 	#elif F_BUS == 108000000
-	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(1) | SIM_CLKDIV1_OUTDIV4(7);	
-	
+	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(1) | SIM_CLKDIV1_OUTDIV4(7);
+
 	#else
 	#error "This F_CPU & F_BUS combination is not supported"
 	#endif
@@ -1088,13 +1087,13 @@ void ResetHandler(void)
 		| SIM_SOPT2_UART0SRC(1) | SIM_SOPT2_TPMSRC(1);
 	#endif
 #else
-    
+
 #if F_CPU == 2000000
 	SIM_SOPT2 = SIM_SOPT2_TRACECLKSEL | SIM_SOPT2_CLKOUTSEL(4) | SIM_SOPT2_UART0SRC(3);
 #else
     SIM_SOPT2 = SIM_SOPT2_TRACECLKSEL | SIM_SOPT2_CLKOUTSEL(6) | SIM_SOPT2_UART0SRC(2);
 #endif
-    
+
 #endif
 
 #if F_CPU <= 2000000
@@ -1158,7 +1157,7 @@ void ResetHandler(void)
 
 	startup_late_hook();
 	main();
-	
+
 	while (1) ;
 }
 
@@ -1195,13 +1194,13 @@ void * _sbrk(int incr)
 	return prev;
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 int _read(int file, char *ptr, int len)
 {
 	return 0;
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 int _close(int fd)
 {
 	return -1;
@@ -1209,44 +1208,44 @@ int _close(int fd)
 
 #include <sys/stat.h>
 
-__attribute__((weak)) 
+__attribute__((weak))
 int _fstat(int fd, struct stat *st)
 {
 	st->st_mode = S_IFCHR;
 	return 0;
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 int _isatty(int fd)
 {
 	return 1;
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 int _lseek(int fd, long long offset, int whence)
 {
 	return -1;
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 void _exit(int status)
 {
 	while (1);
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 void __cxa_pure_virtual()
 {
 	while (1);
 }
 
-__attribute__((weak)) 
-int __cxa_guard_acquire (char *g) 
+__attribute__((weak))
+int __cxa_guard_acquire (char *g)
 {
 	return !(*g);
 }
 
-__attribute__((weak)) 
+__attribute__((weak))
 void __cxa_guard_release(char *g)
 {
 	*g = 1;
