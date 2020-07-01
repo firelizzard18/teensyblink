@@ -215,7 +215,6 @@ int usb_serial_write(const void *buffer, uint32_t size)
 					transmit_previous_timeout = 1;
 					return -1;
 				}
-				yield();
 			}
 		}
 		transmit_previous_timeout = 0;
