@@ -34,7 +34,8 @@
 #if !defined(EventResponder_h) && defined(__cplusplus)
 #define EventResponder_h
 
-#include <Arduino.h>
+// #include <Arduino.h>
+#include <stdint.h>
 
 /* EventResponder lets you control how your program responds to an event.
  * Imagine a basketball or football (American soccer) player who gets the
