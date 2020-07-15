@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/core"
+            ],
+            "defines": [
+                "KINETISL",
+                "__MKL26Z64__ ",
+                "TEENSYDUINO=152",
+                "ARDUINO_TEENSYLC",
+                "ARDUINO=10812",
+                "F_CPU=48000000",
+                "USB_SERIAL",
+                "LAYOUT_US_ENGLISH"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

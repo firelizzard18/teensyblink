@@ -1,17 +1,16 @@
-ARDUINO=/Applications/Arduino.app/Contents/Java
-ARM_BIN=$(ARDUINO)/hardware/tools/arm/bin
-
-CC=$(ARM_BIN)/arm-none-eabi-gcc
-CXX=$(ARM_BIN)/arm-none-eabi-g++
-AR=$(ARM_BIN)/arm-none-eabi-gcc-ar
-OBJCOPY=$(ARM_BIN)/arm-none-eabi-objcopy
-OBJDUMP=$(ARM_BIN)/arm-none-eabi-objdump
+CC=arm-none-eabi-gcc
+CXX=arm-none-eabi-g++
+AR=arm-none-eabi-gcc-ar
+OBJCOPY=arm-none-eabi-objcopy
+OBJDUMP=arm-none-eabi-objdump
 
 FLAGS=-g -Wall -ffunction-sections -fdata-sections -nostdlib
-CFLAGS=-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -D__MK66FX1M0__ -DTEENSYDUINO=146 -DARDUINO=10809 -DF_CPU=180000000 -DUSB_SERIAL -DLAYOUT_US_ENGLISH
-SFLAGS=-x assembler-with-cpp $(CFLAGS)
-CXXFLAGS=-fno-exceptions -fpermissive -felide-constructors -std=gnu++14 -Wno-error=narrowing -fno-rtti $(CFLAGS)
-LDFLAGS=-Wl,--gc-sections,--relax,--defsym=__rtc_localtime=1579708172 -lstdc++ -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -larm_cortexM4lf_math -lm -L./build
+BASEFLAGS=-mthumb -mcpu=cortex-m0plus -fsingle-precision-constant -D__MKL26Z64__ -DTEENSYDUINO=152 -DARDUINO=10812 -DARDUINO_TEENSYLC -DF_CPU=48000000 -DUSB_SERIAL -DLAYOUT_US_ENGLISH
+SFLAGS=-x assembler-with-cpp $(BASEFLAGS)
+CFLAGS=--specs=nano.specs $(BASEFLAGS)
+CXXFLAGS=-fno-exceptions -fpermissive -felide-constructors -std=gnu++14 -Wno-error=narrowing -fno-rtti $(BASEFLAGS)
+LDFLAGS=--specs=nano.specs -Wl,--gc-sections,--relax,--defsym=__rtc_localtime=1579708172 -lstdc++ -mthumb -mcpu=cortex-m0plus -fsingle-precision-constant -lm -L./build
+# -larm_cortexM0l_math
 
 all: build/main.hex
 
@@ -36,7 +35,7 @@ build/core.a: build/core/AudioStream.cpp.o build/core/DMAChannel.cpp.o build/cor
 	rm $@ 2> /dev/null; for x in $^; do $(AR) rcs $@ $$x; done
 
 build/main.elf: build/main.cpp.o build/core.a
-	$(CC) -O2 -T./core/mk66fx1m0.ld $(LDFLAGS) $^ -o $@
+	$(CC) -O2 -T./core/mkl26z64.ld $(LDFLAGS) $^ -o $@
 
 # build/main.eep: build/main.elf
 # 	$(OBJCOPY) -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 $^ $@
@@ -49,9 +48,3 @@ build/main.lst: build/main.elf
 
 build/main.sym: build/main.elf
 	$(OBJDUMP) -t -C $^ > $@
-
-PORT=usb:14600000
-PORTLABEL=/dev/cu.usbmodem58507401 Serial
-load: build/main.hex
-	$(ARDUINO)/hardware/tools/teensy_post_compile -file=main -path=$(shell pwd)/build -tools=$(ARDUINO)/hardware/tools -board=TEENSY36 -reboot -port=$(PORT) -portlabel=$(PORTLABEL) -portprotocol=Teensy
-	# $(ARDUINO)/hardware/tools/teensy_loader_cli -mmcu=mk66fx1m0 -v -w $<
