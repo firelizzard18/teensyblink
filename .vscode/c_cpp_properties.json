@@ -1,13 +1,13 @@
 {
     "configurations": [
         {
-            "name": "Mac",
+            "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/core"
             ],
             "defines": [
                 "KINETISL",
-                "__MKL26Z64__ ",
+                "__MKL26Z64__",
                 "TEENSYDUINO=152",
                 "ARDUINO_TEENSYLC",
                 "ARDUINO=10812",
